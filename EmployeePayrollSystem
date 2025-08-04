@@ -1,0 +1,108 @@
+import java.util.*;
+
+class Employee {
+    int id;
+    String name;
+    double basicSalary;
+    double hra, da, tax, bonus, netSalary;
+
+    Employee(int id, String name, double basicSalary) {
+        this.id = id;
+        this.name = name;
+        this.basicSalary = basicSalary;
+        calculateSalary();
+    }
+
+    void calculateSalary() {
+        hra = 0.20 * basicSalary;
+        da = 0.10 * basicSalary;
+        bonus = 0.05 * basicSalary;
+        tax = 0.08 * basicSalary;
+        netSalary = basicSalary + hra + da + bonus - tax;
+    }
+
+    void display() {
+        System.out.println("\n--- Employee Details ---");
+        System.out.println("ID         : " + id);
+        System.out.println("Name       : " + name);
+        System.out.println("Basic Pay  : " + basicSalary);
+        System.out.println("HRA        : " + hra);
+        System.out.println("DA         : " + da);
+        System.out.println("Bonus      : " + bonus);
+        System.out.println("Tax        : " + tax);
+        System.out.println("Net Salary : " + netSalary);
+    }
+}
+
+public class PayrollManagementSystem {
+    static Scanner sc = new Scanner(System.in);
+    static Map<Integer, Employee> employeeMap = new HashMap<>();
+
+    public static void main(String[] args) {
+        int choice;
+
+        do {
+            System.out.println("\n--- Employee Payroll Management System ---");
+            System.out.println("1. Add Employee");
+            System.out.println("2. Display All Employees");
+            System.out.println("3. Search Employee by ID");
+            System.out.println("4. Exit");
+            System.out.print("Enter your choice: ");
+            choice = sc.nextInt();
+
+            switch (choice) {
+                case 1:
+                    addEmployee();
+                    break;
+                case 2:
+                    displayAllEmployees();
+                    break;
+                case 3:
+                    searchEmployeeById();
+                    break;
+                case 4:
+                    System.out.println("Exiting... Thank you!");
+                    break;
+                default:
+                    System.out.println("Invalid choice! Try again.");
+            }
+
+        } while (choice != 4);
+    }
+
+    static void addEmployee() {
+        System.out.print("Enter Employee ID: ");
+        int id = sc.nextInt();
+        sc.nextLine(); // consume newline
+        System.out.print("Enter Name: ");
+        String name = sc.nextLine();
+        System.out.print("Enter Basic Salary: ");
+        double salary = sc.nextDouble();
+
+        Employee emp = new Employee(id, name, salary);
+        employeeMap.put(id, emp);
+        System.out.println("Employee added successfully!");
+    }
+
+    static void displayAllEmployees() {
+        if (employeeMap.isEmpty()) {
+            System.out.println("No employees found.");
+        } else {
+            for (Employee emp : employeeMap.values()) {
+                emp.display();
+            }
+        }
+    }
+
+    static void searchEmployeeById() {
+        System.out.print("Enter Employee ID to search: ");
+        int id = sc.nextInt();
+        Employee emp = employeeMap.get(id);
+
+        if (emp != null) {
+            emp.display();
+        } else {
+            System.out.println("Employee not found.");
+        }
+    }
+}
